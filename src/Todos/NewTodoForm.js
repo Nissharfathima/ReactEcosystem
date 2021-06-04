@@ -1,16 +1,36 @@
 import React,{useState} from 'react';
+import {connect } from 'react-redux';
+import { todos } from '../reducer.js';
+import {createTodo} from '../action.js';
 import './NewTodoForm.css';
 
-const NewTodoForm = () => {
+const NewTodoForm = ({todos, onCreatePressed}) => {
     const [inputValue, setInputValue] = useState('');
     return(
     <div className="new-todo-form">
         <input type="text" className="new-todo-input"
         value={inputValue}
-        onClick={e => setInputValue(e.target.value)}/>
-        <button className="new-todo-button">Create Todo</button>
+        onChange={e => setInputValue(e.target.value)}/>
+        <button 
+        onClick={() => {
+          
+            onCreatePressed(inputValue)
+            setInputValue('')
+            
+        }}
+        className="new-todo-button">
+            Create Todo
+            </button>
     </div>
 );
     }
 
-export default NewTodoForm;
+    const mapStateToProps = state => ({
+        todos: state.todos,
+    });
+
+    const mapDispatchToProps = dispatch => ({
+        onCreatePressed : text => dispatch(createTodo(text)),
+    });
+
+export default connect(mapStateToProps,mapDispatchToProps)(NewTodoForm);
