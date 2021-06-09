@@ -3,6 +3,7 @@ import {connect } from 'react-redux';
 import { todos } from '../reducer.js';
 import {addTodoRequest} from '../thunks.js';
 import './NewTodoForm.css';
+import {getTodos, getTodosLoading} from './selectors.js';
 
 const NewTodoForm = ({todos, onCreatePressed}) => {
     const [inputValue, setInputValue] = useState('');
@@ -13,10 +14,11 @@ const NewTodoForm = ({todos, onCreatePressed}) => {
         onChange={e => setInputValue(e.target.value)}/>
         <button 
         onClick={() => {
-          
+            const isDuplicate = todos.some(todo => todo.text === inputValue)
+            if(!isDuplicate){
             onCreatePressed(inputValue)
             setInputValue('')
-            
+            }
         }}
         className="new-todo-button">
             Create Todo
@@ -26,7 +28,7 @@ const NewTodoForm = ({todos, onCreatePressed}) => {
     }
 
     const mapStateToProps = state => ({
-        todos: state.todos,
+        todos: getTodos(state),
     });
 
     const mapDispatchToProps = dispatch => ({
