@@ -4,17 +4,19 @@ import styled from 'styled-components';
 const TodoItemContainer = styled.div`
 background: #fff;
 border-radius: 8px;
-
 margin-top: 8px;
 padding: 16px;
 position: relative;
 box-shadow: 0 4px 8px grey;
 `;
 
+export const getBorderStyleForDate = (createdDate, currentDate) => (
+    new Date(createdDate) > new Date(currentDate - 86400000 * 5 )
+    ? 'none' : '2px solid red'
+);
+
 const TodoItemContainerWithWarning = styled(TodoItemContainer)`
-border-bottom : ${props => 
-    (new Date(props.createdAt) > new Date(Date.now() - 8640000 * 5)?
-    'none':'2px solid red')};
+border-bottom : ${props => getBorderStyleForDate(props.createdAt,Date.now())};
 `;
 
 const ButtonsContainer = styled.div`
